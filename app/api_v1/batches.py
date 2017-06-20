@@ -11,6 +11,14 @@ from ..models import Batch, Agency
 def get_batches():
     return Batch.query
 
+# @api.route('/batches', methods=['POST'])
+# @json
+# def new_batch():
+#     batch = Batch()
+#     batch.import_data(request.json)
+#     db.session.add(batch)
+#     db.session.commit()
+#     return {}, 201, {'location': batch.get_url()}
 
 @api.route('/agencies/<int:id>/batches', methods=['GET'])
 @json
@@ -22,13 +30,31 @@ def get_agency_batches(id):
 
 @api.route('/agencies/<int:id>/batches', methods=['POST'])
 @json
-def add_batch(id):
+def add_agency_batches(id):
     agency = Agency.query.get_or_404(id)
     batch = Batch(agency=agency)
     batch.import_data(request.json)
     db.session.add(batch)
     db.session.commit()
     return {}, 201, {'location': batch.get_url()}
+
+@api.route('/agencies/<int:id>/contacts', methods=['GET'])
+@json
+@paginate('contacts')
+def get_agency_contacts(id):
+    agency = Agency.query.get_or_404(id)
+    return agency.contacts
+
+
+@api.route('/agencies/<int:id>/contacts', methods=['POST'])
+@json
+def add_agency_contacts(id):
+    agency = Agency.query.get_or_404(id)
+    contact = Contact(agency=agency)
+    contact.import_data(request.json)
+    db.session.add(batch)
+    db.session.commit()
+    return {}, 201, {'location': contact.get_url()}
 
 
 @api.route('/batches/<int:id>', methods=['GET'])

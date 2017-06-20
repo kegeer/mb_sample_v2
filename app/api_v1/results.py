@@ -11,7 +11,6 @@ from . import api
 def get_results():
     return Result.query
 
-
 @api.route('/samples/<int:id>/results', methods=['GET'])
 @json
 @paginate('results')
